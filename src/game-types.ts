@@ -6,7 +6,14 @@ export type GamePhase = "Shopping"
   | "Defeat";
 
 export interface Team {
-  dummy: string;
+  nouns: Noun[];
+}
+
+export interface Noun {
+  imageURL: string;
+  hp: number;
+  attack: number;
+  id: string;
 }
 
 export interface Enemy {
