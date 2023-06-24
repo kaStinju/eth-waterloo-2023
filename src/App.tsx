@@ -1,26 +1,26 @@
-import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import { useState } from 'react';
+import { AppState, HomeState, LobbyState, LoginState, PlayState, SetAppState } from './app-types';
+import { Login } from './Login';
+import { Home } from './Home';
+import { Lobby } from './Lobby';
+import { Play } from './Play';
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+  const [state, setState] = useState<AppState>({ stateName: "Login" })
+  switch(state.stateName) {
+    case "Login":
+      return <Login state={state} setState={setState as SetAppState<LoginState>}/>
+    case "Home":
+      return <Home state={state} setState={setState as SetAppState<HomeState>}/>
+    case "Lobby":
+      return <Lobby state={state} setState={setState as SetAppState<LobbyState>}/>
+    case "Play":
+      return <Play state={state} setState={setState as SetAppState<PlayState>}/>
+    default:
+      return <div>Invalid app state.</div>
+  }
 }
+
 
 export default App;

@@ -1,16 +1,20 @@
+import { Client } from "@xmtp/xmtp-js";
+import { Wallet } from "ethers";
 import { GameState } from "./game-types";
 
 export interface Account {
   accountId: string;
+  wallet: Wallet;
+  xmtp: Client,
 }
 
-export interface LoginScreen {
-  screen: "Login";
+export interface LoginState {
+  stateName: "Login";
   lobbyId?: string;
 };
 
-export interface HomeScreen {
-  screen: "Home";
+export interface HomeState {
+  stateName: "Home";
   account: Account;
 };
 
@@ -19,18 +23,26 @@ export interface LobbyMember {
   ready: boolean;
 }
 
-export interface LobbyScreen {
-  screen: "Lobby";
+export interface LobbyState {
+  stateName: "Lobby";
   account: Account;
   lobbyId: string;
   ready: boolean;
   lobbyMembers: LobbyMember[];
 };
 
-export interface PlayScreen {
-  screen: "Play";
+export interface PlayState {
+  stateName: "Play";
+  account: Account;
   gameId: string;
   game: GameState;
 };
 
-export type AppScreen = LoginScreen | HomeScreen | LobbyScreen | PlayScreen;
+export type SetAppState<S> = (x: ((s: S) => S | AppState) | S | AppState) => void;
+
+export interface AppStateProps<S> {
+  state: S;
+  setState: SetAppState<S>;
+}
+
+export type AppState = LoginState | HomeState | LobbyState | PlayState;
