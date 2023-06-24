@@ -25,7 +25,6 @@ export interface Enemy {
 export interface GameState {
   phase: GamePhase;
   turn: number;
-  accountId: string;
   hp: number;
   team: Team;
   enemies: Enemy[];
