@@ -2,6 +2,7 @@ import p5Types from "p5";
 import { Noun } from "./game-types";
 
 export const C_RED = '#FFAAAA'
+export const C_BLUE = '#AAAAFF'
 export const C_WHITE = '#FFFFFF'
 
 export interface Resources {
@@ -39,14 +40,21 @@ export function drawNoun(p5: p5Types,
   x: number,
   y: number,
   flipped: boolean,
-  onClick: () => void = () => { }
+  target: boolean = false,
 ) {
   const size = 64;
   const spacing = 4;
   const rectSize = 32
+  const border = 4;
   const image = resources.imageMap.get(noun.imageURL);
   if (!image) {
     throw Error("No image");
+  }
+  // Border if selected
+  if (target) {
+    p5.fill(C_BLUE)
+    p5.rect(x - border, y - border, size + 2*border, size + 2*border + spacing + rectSize)
+    p5.fill(0)
   }
   //draws image
   if (flipped) {
