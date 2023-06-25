@@ -16,7 +16,6 @@ interface LobbyMemberStatus {
 const LOBBY_PREFIX = "noun-battler/"
 const DEFAULT_TEAM = teamTigers;
 const DEFAULT_HP = 5;
-const BASE_URL = "http://localhost:3000/";
 
 async function broadcastStatus(state: LobbyState) {
   const status = { accountId: state.account.accountId, ready: state.ready };
@@ -54,6 +53,8 @@ function gameState(state: LobbyState): GameState {
 
 export function Lobby({ state, setState }: AppStateProps<LobbyState>) {
   const [timeoutId, setTimeoutId] = useState<ReturnType<typeof setTimeout> | null>(null);
+  const baseUrl = window.location.origin + window.location.pathname;
+  const inviteUrl = `${baseUrl}?lobby=${state.lobbyId}`;
 
 
   useEffect(() => {
@@ -109,6 +110,6 @@ export function Lobby({ state, setState }: AppStateProps<LobbyState>) {
       {state.lobbyMembers.map((x) => (<li key={x.accountId}>{x.accountId}{x.ready ? " - Ready" : ""}</li>))}
     </ul>
     {timeoutId && <p>Starting...</p>}
-    <Recommendations account={state.account} inviteUrl={`${BASE_URL}?lobby=${state.lobbyId}`} />
+    <Recommendations account={state.account} inviteUrl={inviteUrl} />
   </div>
 }
