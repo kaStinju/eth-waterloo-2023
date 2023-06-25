@@ -47,7 +47,7 @@ function gameState(state: LobbyState): GameState {
 }
 
 export function Lobby({state, setState}: AppStateProps<LobbyState>) {
-  const [timeoutId, setTimeoutId] = useState(0);
+  const [timeoutId, setTimeoutId] = useState<ReturnType<typeof setTimeout> | null>(null);
   useEffect(() => {
     broadcastStatus(state);
   }, [state.ready]);
@@ -79,15 +79,15 @@ export function Lobby({state, setState}: AppStateProps<LobbyState>) {
 
   useEffect(() => {
     if (state.ready && state.lobbyMembers.every((x) => x.ready)) {
-      if (timeoutId === 0) {
-        setTimeout(() => setState((s) => (
+      if (!timeoutId) {
+        setTimeoutId(setTimeout(() => setState((s) => (
           { stateName: "Play", account: s.account, game: gameState(s), gameId: gameId(s) }
-        )), 3000);
+        )), 2000));
       }
     } else {
-      if (timeoutId !== 0) {
+      if (timeoutId) {
         clearTimeout(timeoutId);
-        setTimeoutId(0);
+        setTimeoutId(null);
       }
     }
   }, [state.ready, state.lobbyMembers, timeoutId]);
@@ -100,5 +100,6 @@ export function Lobby({state, setState}: AppStateProps<LobbyState>) {
       <li><b>{state.account.accountId}{state.ready ? " - Ready" : ""}</b></li>
       {state.lobbyMembers.map((x) => (<li key={x.accountId}>{x.accountId}{x.ready ? " - Ready" : ""}</li>))}
     </ul>
+    {timeoutId && <p>Starting...</p>}
   </div>
 }
