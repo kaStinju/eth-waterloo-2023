@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { AppStateProps, LobbyState, PlayState } from './app-types';
 import { GameState } from './game-types';
 import { broadcast, listen } from './xmtp-utils';
+import { teamTigers } from './dummydata';
 
 interface LobbyMemberStatus {
   accountId: string;
@@ -10,11 +11,11 @@ interface LobbyMemberStatus {
 }
 
 const LOBBY_PREFIX = "noun-battler/"
-const DEFAULT_TEAM = { dummy: "" };
+const DEFAULT_TEAM = teamTigers;
 const DEFAULT_HP = 5;
 
 async function broadcastStatus(state: LobbyState) {
-  const status = { accountId: state.account.accountId, ready: state.ready};
+  const status = { accountId: state.account.accountId, ready: state.ready };
   await broadcast(
     state.account.xmtp,
     LOBBY_PREFIX + state.lobbyId,
@@ -41,12 +42,12 @@ function gameState(state: LobbyState): GameState {
     phase: "Shopping",
     turn: 1,
     hp: DEFAULT_HP,
-    team: { dummy: "" },
-    enemies: state.lobbyMembers.map((x) => ({accountId: x.accountId, hp: DEFAULT_HP, team: DEFAULT_TEAM})),
+    team: DEFAULT_TEAM,
+    enemies: state.lobbyMembers.map((x) => ({ accountId: x.accountId, hp: DEFAULT_HP, team: DEFAULT_TEAM })),
   }
 }
 
-export function Lobby({state, setState}: AppStateProps<LobbyState>) {
+export function Lobby({ state, setState }: AppStateProps<LobbyState>) {
   const [timeoutId, setTimeoutId] = useState(0);
   useEffect(() => {
     broadcastStatus(state);
@@ -59,9 +60,9 @@ export function Lobby({state, setState}: AppStateProps<LobbyState>) {
         setState((s) => ({ ...s, lobbyMembers: [...s.lobbyMembers, incomingStatus] }));
         broadcastStatus(state);
       } else {
-        for (let i = 0; i < state.lobbyMembers.length; i ++) {
+        for (let i = 0; i < state.lobbyMembers.length; i++) {
           if (
-            state.lobbyMembers[i].accountId == incomingStatus.accountId && 
+            state.lobbyMembers[i].accountId == incomingStatus.accountId &&
             state.lobbyMembers[i].ready != incomingStatus.ready
           ) {
             setState((s) => {
@@ -96,7 +97,7 @@ export function Lobby({state, setState}: AppStateProps<LobbyState>) {
     <h1>Lobby</h1>
     <h2>{state.lobbyId}</h2>
     <ul>
-      <li><button onClick={() => setState({ ...state, ready: !state.ready})}>Ready</button></li>
+      <li><button onClick={() => setState({ ...state, ready: !state.ready })}>Ready</button></li>
       <li><b>{state.account.accountId}{state.ready ? " - Ready" : ""}</b></li>
       {state.lobbyMembers.map((x) => (<li key={x.accountId}>{x.accountId}{x.ready ? " - Ready" : ""}</li>))}
     </ul>
