@@ -27,16 +27,16 @@ function largeImage(p5: p5Types, resources: Resources, noun: Noun, x: number, y:
   } else {
     p5.image(image, x, y, rectSize * 4, rectSize * 4)
   }
-  p5.fill(C_RED)
-  p5.rect(x, y + rectSize * 4, rectSize, rectSize)
-  p5.fill(0)
-  p5.text(noun.hp, x + 2, y + rectSize * 4, rectSize, rectSize)
-
   //attack
   p5.fill(C_WHITE)
+  p5.rect(x, y + rectSize * 4, rectSize, rectSize)
+  p5.fill(0)
+  p5.text(noun.attack, x + 2, y + rectSize * 4, rectSize, rectSize)
+
+  p5.fill(C_RED)
   p5.rect(x + rectSize * 3, y + rectSize * 4, rectSize, rectSize)
   p5.fill(0)
-  p5.text(noun.attack, x + rectSize * 3 + 2, y + rectSize * 4, rectSize, rectSize)
+  p5.text(noun.hp, x + rectSize * 3 + 2, y + rectSize * 4, rectSize, rectSize)
 }
 
 export function Battle({state, setState}: GameWindowProps) {
@@ -103,7 +103,7 @@ export function Battle({state, setState}: GameWindowProps) {
   function drawFight(p5: p5Types) {
     if (!liveState) throw Error("State missing");
     if (!resources) throw Error("Resources missing");
-    p5.background(200);
+    p5.background(230);
     const spacing = 70
     const rectSize = 32
     const teamsY = 400

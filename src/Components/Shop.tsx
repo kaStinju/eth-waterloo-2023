@@ -145,7 +145,7 @@ export function Shop({state, setState}: GameWindowProps) {
     if (!resources) throw Error("Resources missing");
     const { team, shop } = liveState;
     // Background
-    p5.background(200);
+    p5.background(230);
     p5.rect(0, TEAM_ROAD_TOP, p5.width, SIZE)
     p5.rect(0, SHOP_ROAD_TOP, p5.width, SIZE)
     // Team
