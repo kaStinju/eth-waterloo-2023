@@ -86,7 +86,7 @@ export function Lobby({ state, setState }: AppStateProps<LobbyState>) {
   }, [state.lobbyMembers]);
 
   useEffect(() => {
-    if (state.ready && state.lobbyMembers.every((x) => x.ready)) {
+    if (state.ready && state.lobbyMembers.every((x) => x.ready) && state.lobbyMembers.length > 0) {
       if (!timeoutId) {
         setTimeoutId(setTimeout(() => setState((s) => (
           { stateName: "Play", account: s.account, game: gameState(s), gameId: gameId(s) }
