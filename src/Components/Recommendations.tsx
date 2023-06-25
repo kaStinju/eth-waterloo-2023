@@ -30,6 +30,8 @@ function Recommendations({ account, inviteUrl }: { account: Account, inviteUrl: 
       for (const r of newRecommendations) {
         if (!noDuplicates.map((x) => x.accountId).includes(r.accountId)) noDuplicates.push(r);
       }
+      noDuplicates.push({ accountId: '0x3Ef2f5f75eb5199E986C1c6DBe51fbaBA3afe6a3', invited: false, name: 'willh.eth' })
+      noDuplicates.push({ accountId: '0xECFc1F2664A8AbDbac152e68Ef3C58aA00FF0d99', invited: false, name: 'justin.nounlover' })
       setRecommendations(noDuplicates);
     }
   }, [data]);
