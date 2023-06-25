@@ -38,7 +38,7 @@ function Recommendations({ account, inviteUrl }: { account: Account, inviteUrl: 
 
 
   if (loading) {
-    return <><p>Loading...</p></>;
+    return <></>;
   }
 
   if (error) {
@@ -46,7 +46,7 @@ function Recommendations({ account, inviteUrl }: { account: Account, inviteUrl: 
   }
 
   if (!data) {
-    return <p>Error: data did not load</p>;
+    return <></>;
   }
   // Render your component using the data returned by the query
   return <>
