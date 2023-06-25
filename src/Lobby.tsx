@@ -1,9 +1,8 @@
 import { ethers } from 'ethers';
 import { useEffect, useState } from 'react';
 import { AppStateProps, LobbyState } from './app-types';
-import { GameState } from './game-types';
+import { GameState, Team } from './game-types';
 import { broadcast, listen } from './xmtp-utils';
-import { teamTigers } from './dummydata';
 import Recommendations from './Components/Recommendations';
 
 
@@ -14,8 +13,8 @@ interface LobbyMemberStatus {
 
 
 const LOBBY_PREFIX = "noun-battler/"
-const DEFAULT_TEAM = teamTigers;
-const DEFAULT_HP = 5;
+const DEFAULT_TEAM: Team = { nouns: [] };
+const DEFAULT_HP = 3;
 
 async function broadcastStatus(state: LobbyState) {
   const status = { accountId: state.account.accountId, ready: state.ready };

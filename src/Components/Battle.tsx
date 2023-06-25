@@ -68,6 +68,22 @@ export function Battle({state, setState}: GameWindowProps) {
       const step = liveState.sequence.shift();
       if (!step) {
         clearInterval(interval);
+        let enemyHp = enemy.hp;
+        let hp = state.hp;
+        if (liveState.a.nouns.length > 0) {
+          enemyHp --;
+        }
+        if (liveState.b.nouns.length > 0) {
+          hp --;
+        }
+        const newState = {...state, hp, enemies: state.enemies.map((x, i) => (i == 0 ? { ...enemy, hp: enemyHp } : x))};
+        if (hp == 0) {
+          setState({...newState, phase: "Defeat"});
+        } else if (enemyHp == 0) {
+          setState({...newState, phase: "Victory"});
+        } else {
+          setState({...newState, turn: newState.turn + 1, phase: "Shopping" });
+        }
         return;
       }
       liveState.a = step.a;
