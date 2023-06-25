@@ -29,3 +29,8 @@ export interface GameState {
   team: Team;
   enemies: Enemy[];
 }
+
+export interface GameWindowProps {
+  state: GameState;
+  setState: (gs: GameState) => void
+}
