@@ -1,4 +1,4 @@
-import { Wallet } from 'ethers'
+import { Wallet, ethers } from 'ethers'
 import { Client } from '@xmtp/xmtp-js';
 import { AppStateProps, Account, LoginState, HomeState, LobbyState } from './app-types';
 
@@ -27,11 +27,19 @@ function guestWallet(): Wallet {
   return Wallet.createRandom() as unknown as Wallet;
 }
 
+async function browserWallet(): Promise<Wallet> {
+    const provider = new ethers.BrowserProvider(
+      (window as any).ethereum
+    );
+    await provider.send("eth_requestAccounts", []);
+    return await provider.getSigner() as unknown as Wallet;
+}
+
 export function Login({state, setState}: AppStateProps<LoginState>) {
   return <div>
     <h1>Login</h1>
     <ul>
-      <li><button onClick={() => alert("Not implemented")}>Play</button></li>
+      <li><button onClick={async () => setState(await nextState(state, await browserWallet()))}>Play</button></li>
       <li><button onClick={async () => setState(await nextState(state, guestWallet()))}>Play as guest</button></li>
     </ul>
   </div>

@@ -38,7 +38,10 @@ export function Home({state, setState}: AppStateProps<HomeState>) {
       }>Play</button></li>
       <li>
         <form onSubmit={
-          () => { if (validateLobbyId(lobbyId, false)) setState(lobbyState) }
+          (e) => {
+            if (validateLobbyId(lobbyId, false)) setState(lobbyState);
+            e.preventDefault();
+          }
         }>
         <input type="text" value={lobbyId} onChange={(e) => {
           if (validateLobbyId(e.target.value, true)) setLobbyId(e.target.value)
