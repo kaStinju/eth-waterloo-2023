@@ -1,5 +1,10 @@
 import { Client, Stream } from '@xmtp/xmtp-js';
 
+export async function dm(xmtp: Client, accountId: string, text: string) {
+  const conv = await xmtp.conversations.newConversation(accountId);
+  await conv.send(text);
+}
+
 export async function broadcast(xmtp: Client, channel: string, text: string) {
   const enc = new TextEncoder();
   await xmtp.publishEnvelopes([{ contentTopic: channel, message: enc.encode(text) }]);

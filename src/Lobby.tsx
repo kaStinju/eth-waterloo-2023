@@ -1,8 +1,8 @@
 import { ethers } from 'ethers';
 import { useEffect, useState } from 'react';
-import { AppStateProps, LobbyState, PlayState } from './app-types';
+import { AppStateProps, LobbyState } from './app-types';
 import { GameState } from './game-types';
-import { broadcast, listen } from './xmtp-utils';
+import { broadcast, listen, dm } from './xmtp-utils';
 import { teamTigers } from './dummydata';
 
 interface LobbyMemberStatus {
@@ -13,6 +13,7 @@ interface LobbyMemberStatus {
 const LOBBY_PREFIX = "noun-battler/"
 const DEFAULT_TEAM = teamTigers;
 const DEFAULT_HP = 5;
+const BASE_URL = "http://localhost:3000/";
 
 async function broadcastStatus(state: LobbyState) {
   const status = { accountId: state.account.accountId, ready: state.ready };
@@ -47,8 +48,20 @@ function gameState(state: LobbyState): GameState {
   }
 }
 
+interface Recommendation {
+  accountId: string;
+  invited: boolean;
+}
+
 export function Lobby({state, setState}: AppStateProps<LobbyState>) {
   const [timeoutId, setTimeoutId] = useState<ReturnType<typeof setTimeout> | null>(null);
+  const [recommendations, setRecommendations] = useState<Recommendation[]>([])
+
+  useEffect(() => {
+    // TODO
+    setRecommendations([]);
+  }, []);
+
   useEffect(() => {
     broadcastStatus(state);
   }, [state.ready]);
@@ -102,5 +115,17 @@ export function Lobby({state, setState}: AppStateProps<LobbyState>) {
       {state.lobbyMembers.map((x) => (<li key={x.accountId}>{x.accountId}{x.ready ? " - Ready" : ""}</li>))}
     </ul>
     {timeoutId && <p>Starting...</p>}
+    <h2>Recommended</h2>
+    <ul>
+      {recommendations.map((x) => (<li key={x.accountId}>
+        {x.accountId}{" "}
+        <button disabled={x.invited} onClick={() => {
+          const inviteUrl = `${BASE_URL}?lobby=${state.lobbyId}`;
+          const text = `Join my game: ${inviteUrl}`;
+          dm(state.account.xmtp, x.accountId, text);
+          setRecommendations((r) => r.map((y) => y.accountId == x.accountId ? { ...x, invited: true } : y))
+        }}>Invite</button>
+      </li>))}
+    </ul>
   </div>
 }

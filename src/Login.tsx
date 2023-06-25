@@ -1,12 +1,13 @@
 import { Wallet, ethers } from 'ethers'
 import { Client } from '@xmtp/xmtp-js';
 import { AppStateProps, Account, LoginState, HomeState, LobbyState } from './app-types';
+import { useEffect } from 'react';
 
 async function nextState(state: LoginState, wallet: Wallet): Promise<HomeState | LobbyState> {
   const account: Account = {
     accountId: await wallet.getAddress(),
     wallet,
-    xmtp: await Client.create(wallet),
+    xmtp: await Client.create(wallet), // XMTP dev
   }
   if (state.lobbyId) {
     return {
@@ -27,6 +28,13 @@ function guestWallet(): Wallet {
   return Wallet.createRandom() as unknown as Wallet;
 }
 
+function getLobbyId(): string | null {
+  const queryString = window.location.search;
+  const urlParams = new URLSearchParams(queryString);
+  return urlParams.get("lobby");
+}
+
+
 async function browserWallet(): Promise<Wallet> {
     const provider = new ethers.BrowserProvider(
       (window as any).ethereum
@@ -36,6 +44,12 @@ async function browserWallet(): Promise<Wallet> {
 }
 
 export function Login({state, setState}: AppStateProps<LoginState>) {
+  useEffect(() => {
+    const lobbyId = getLobbyId();
+    if (lobbyId) {
+      setState((s) => ({...s, lobbyId }));
+    }
+  }, []);
   return <div>
     <h1>Login</h1>
     <ul>
