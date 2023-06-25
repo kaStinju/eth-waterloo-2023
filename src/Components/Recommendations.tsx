@@ -51,16 +51,20 @@ function Recommendations({ account, inviteUrl }: { account: Account, inviteUrl: 
   // Render your component using the data returned by the query
   return <>
     <h2>Recommended</h2>
-    <ul>
-      {recommendations.map((x) => (<li key={x.accountId}>
-        {x.name ? x.name : x.accountId}{" "}
-        <button disabled={x.invited} onClick={() => {
-          const text = `Join my game: ${inviteUrl}`;
-          dm(account.xmtp, x.accountId, text);
-          setRecommendations((r) => r.map((y) => y.accountId == x.accountId ? { ...x, invited: true } : y))
-        }}>Invite</button>
-      </li>))}
-    </ul>
+    <div className='recommended'>
+      {recommendations.map((x) => (
+        <div id='rec-invite'>
+          <img src={`https://noun.pics/${Number(x.accountId) % 300}`} />
+          <div key={x.accountId}>{x.name ? x.name : `${x.accountId.substring(0, 32)}...`}{" "}
+            <button disabled={x.invited} onClick={() => {
+              const text = `Join my game: ${inviteUrl}`;
+              dm(account.xmtp, x.accountId, text);
+              setRecommendations((r) => r.map((y) => y.accountId == x.accountId ? { ...x, invited: true } : y))
+            }}>Invite</button>
+          </div>
+        </div>
+      ))}
+    </div>
   </>
 };
 

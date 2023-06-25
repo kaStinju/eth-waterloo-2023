@@ -100,16 +100,34 @@ export function Lobby({ state, setState }: AppStateProps<LobbyState>) {
       }
     }
   }, [state.ready, state.lobbyMembers, timeoutId]);
-
-  return <div>
-    <h1>Lobby</h1>
-    <h2>{state.lobbyId}</h2>
-    <ul>
-      <li><button onClick={() => setState({ ...state, ready: !state.ready })}>Ready</button></li>
-      <li><b>{state.account.accountId}{state.ready ? " - Ready" : ""}</b></li>
-      {state.lobbyMembers.map((x) => (<li key={x.accountId}>{x.accountId}{x.ready ? " - Ready" : ""}</li>))}
-    </ul>
-    {timeoutId && <p>Starting...</p>}
+  
+  return <div className='lobby'>
+    <h1>{timeoutId ? 'Starting...' : `Lobby #${state.lobbyId}`}</h1>
+    <div >
+      <div className='players'>
+        <div className='active'>
+          <img src={`https://noun.pics/${Number(state.account.accountId) % 300}`} />
+          <div>
+            <b>{`${state.account.accountId.substring(0, 24)}...`}{state.ready ? " - Ready" : ""}</b>
+            <br></br>
+            <button onClick={() => setState({ ...state, ready: !state.ready })}>Ready</button>
+          </div>
+        </div>
+        {state.lobbyMembers.map((x) => (
+          <div className='active'>
+            <div key={x.accountId}>
+              <div className='active'>
+                <img src={`https://noun.pics/${Number(x.accountId) % 300}`} />
+                {`${x.accountId.substring(0, 24)}...`}
+                <br>
+                </br>
+                {x.ready ? " - Ready" : "Not Ready"}
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
     <Recommendations account={state.account} inviteUrl={inviteUrl} />
-  </div>
+  </div >
 }
