@@ -52,7 +52,7 @@ export function Login({ state, setState }: AppStateProps<LoginState>) {
     }
   }, []);
   return (<div className='login'>
-    <h1>Noun Knockout</h1>
+    <h1>The Noun Knockout Card Game</h1>
     <table>
       <tbody>
         <tr>
