@@ -1,64 +1,23 @@
 import { v4 as uuidv4 } from 'uuid'
+import { Noun } from './game-types';
 
-export const NounIndex = [
-  {
-    imageURL: 'https://noun.pics/10',
-    hp: 3,
-    attack: 7,
-    id: uuidv4()
-  },
-  {
-    imageURL: 'https://noun.pics/1',
-    hp: 4,
-    attack: 3,
-    id: uuidv4()
-  },
-  {
-    imageURL: 'https://noun.pics/2',
-    hp: 1,
-    attack: 1,
-    id: uuidv4()
-  },
-  {
-    imageURL: 'https://noun.pics/3',
-    hp: 6,
-    attack: 2,
-    id: uuidv4()
-  },
-  {
-    imageURL: 'https://noun.pics/4',
-    hp: 13,
-    attack: 3,
-    id: uuidv4()
-  },
-  {
-    imageURL: 'https://noun.pics/0',
-    hp: 3,
-    attack: 3,
-    id: uuidv4()
-  },
-  {
-    imageURL: 'https://noun.pics/4',
-    hp: 4,
-    attack: 3,
-    id: uuidv4()
-  },
-  {
-    imageURL: 'https://noun.pics/4',
-    hp: 1,
-    attack: 1,
-    id: uuidv4()
-  },
-  {
-    imageURL: 'https://noun.pics/3',
-    hp: 6,
-    attack: 2,
-    id: uuidv4()
-  },
-  {
-    imageURL: 'https://noun.pics/4',
-    hp: 1,
-    attack: 3,
-    id: uuidv4()
+function randomInt(max: number) {
+  return Math.floor(Math.random() * max)
+}
+
+export function makeNoun(nounIndex: number, hp: number, attack: number): Noun {
+  return {
+    imageURL: `https://noun.pics/${nounIndex}`,
+    hp,
+    attack,
+    id: uuidv4(),
   }
-]
+}
+
+export function randomNoun(powerLevel: number) {
+  const sum = powerLevel * 2 + randomInt(4);
+  const atk = 1 + randomInt(sum - 2);
+  const hp = sum - atk;
+  const idx = randomInt(500);
+  return makeNoun(idx, hp, atk);
+}

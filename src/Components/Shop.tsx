@@ -3,8 +3,7 @@ import p5Types from "p5";
 
 import { createHitboxHandler, C_BLUE, C_WHITE, drawNoun, HitboxTrigger, loadImages, Resources } from '../p5-utils';
 import { Team, GameWindowProps, Noun } from '../game-types';
-import { teamTigers } from "../dummydata";
-import { NounIndex } from "../nouns";
+import { randomNoun } from "../nouns";
 
 const SIZE = 64;
 const SPACING = 70;
@@ -46,7 +45,7 @@ function drawInfo(p5: p5Types, go: boolean, sell: boolean) {
   p5.textAlign(p5.LEFT, p5.CENTER);
   p5.textSize(48)
   p5.text("Team", 16, TEAM_ROAD_TOP + SIZE/2)
-  p5.text("Store", 16, SHOP_ROAD_TOP + SIZE/2)
+  p5.text(`$${UNIT_COST}`, 16, SHOP_ROAD_TOP + SIZE/2)
   p5.textAlign(p5.CENTER, p5.CENTER);
   if (go) {
     p5.fill(C_BLUE)
@@ -66,9 +65,16 @@ function drawInfo(p5: p5Types, go: boolean, sell: boolean) {
 export function Shop({state, setState}: GameWindowProps) {
   let resources: Resources | null = null;
   let liveState: ShopLiveState | null = null;
+  let sale: Noun[] = [];
 
   function preload(p5: p5Types) {
-    resources = { imageMap: loadImages(p5, NounIndex.map((x) => x.imageURL)) };
+    for (let i = 0; i < MAX_SHOP_SIZE; i ++) {
+      sale.push(randomNoun(state.turn));
+    }
+    resources = { imageMap: loadImages(p5, [
+      ...sale.map((x) => x.imageURL),
+      ...state.team.nouns.map((x) => x.imageURL)
+    ]) };
   }
 
   function swap(id1: string, id2: string) {
@@ -85,7 +91,7 @@ export function Shop({state, setState}: GameWindowProps) {
     liveState = {
       team: state.team,
       hitboxes: [],
-      shop: [teamTigers.nouns[0], teamTigers.nouns[1], teamTigers.nouns[2]],
+      shop: sale,
       target: null,
       gold: 10,
     }

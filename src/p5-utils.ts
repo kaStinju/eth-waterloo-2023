@@ -67,14 +67,14 @@ export function drawNoun(p5: p5Types,
   p5.textSize(16)
   //draws health
   p5.fill(C_RED)
-  p5.rect(x, y + size + spacing, rectSize, rectSize)
-  p5.fill(0)
-  p5.text(noun.hp, x + 16, y + 16 + spacing + size)
-  //draws power
-  p5.fill(C_WHITE)
   p5.rect(x + rectSize, y + size + spacing, rectSize, rectSize)
   p5.fill(0)
-  p5.text(noun.attack, x + 48, y + 16 + spacing + size)
+  p5.text(noun.hp, x + 48, y + 16 + spacing + size)
+  //draws power
+  p5.fill(C_WHITE)
+  p5.rect(x, y + size + spacing, rectSize, rectSize)
+  p5.fill(0)
+  p5.text(noun.attack, x + 16, y + 16 + spacing + size)
 }
 
 export interface HitboxTrigger {
