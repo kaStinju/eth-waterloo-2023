@@ -1,0 +1,13 @@
+{
+  "name": "uploader",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "web3.storage": "^4.5.4"
+  },
+  "type": "module",
+  "scripts": {
+    "upload": "node ./upload.js"
+  }
+}
