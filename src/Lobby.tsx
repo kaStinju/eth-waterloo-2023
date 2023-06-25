@@ -2,9 +2,8 @@ import { ethers } from 'ethers';
 import { useEffect, useState } from 'react';
 import { AppStateProps, LobbyState } from './app-types';
 import { GameState } from './game-types';
-import { broadcast, listen, dm } from './xmtp-utils';
+import { broadcast, listen } from './xmtp-utils';
 import { teamTigers } from './dummydata';
-import { init, useQuery } from "@airstack/airstack-react";
 import Recommendations from './Components/Recommendations';
 
 
