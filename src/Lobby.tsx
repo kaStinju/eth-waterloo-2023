@@ -4,11 +4,15 @@ import { AppStateProps, LobbyState } from './app-types';
 import { GameState } from './game-types';
 import { broadcast, listen, dm } from './xmtp-utils';
 import { teamTigers } from './dummydata';
+import { init, useQuery } from "@airstack/airstack-react";
+import Recommendations from './Components/Recommendations';
+
 
 interface LobbyMemberStatus {
   accountId: string;
   ready: boolean;
 }
+
 
 const LOBBY_PREFIX = "noun-battler/"
 const DEFAULT_TEAM = teamTigers;
@@ -48,19 +52,10 @@ function gameState(state: LobbyState): GameState {
   }
 }
 
-interface Recommendation {
-  accountId: string;
-  invited: boolean;
-}
 
-export function Lobby({state, setState}: AppStateProps<LobbyState>) {
+export function Lobby({ state, setState }: AppStateProps<LobbyState>) {
   const [timeoutId, setTimeoutId] = useState<ReturnType<typeof setTimeout> | null>(null);
-  const [recommendations, setRecommendations] = useState<Recommendation[]>([])
 
-  useEffect(() => {
-    // TODO
-    setRecommendations([]);
-  }, []);
 
   useEffect(() => {
     broadcastStatus(state);
@@ -115,17 +110,6 @@ export function Lobby({state, setState}: AppStateProps<LobbyState>) {
       {state.lobbyMembers.map((x) => (<li key={x.accountId}>{x.accountId}{x.ready ? " - Ready" : ""}</li>))}
     </ul>
     {timeoutId && <p>Starting...</p>}
-    <h2>Recommended</h2>
-    <ul>
-      {recommendations.map((x) => (<li key={x.accountId}>
-        {x.accountId}{" "}
-        <button disabled={x.invited} onClick={() => {
-          const inviteUrl = `${BASE_URL}?lobby=${state.lobbyId}`;
-          const text = `Join my game: ${inviteUrl}`;
-          dm(state.account.xmtp, x.accountId, text);
-          setRecommendations((r) => r.map((y) => y.accountId == x.accountId ? { ...x, invited: true } : y))
-        }}>Invite</button>
-      </li>))}
-    </ul>
+    <Recommendations account={state.account} inviteUrl={`${BASE_URL}?lobby=${state.lobbyId}`} />
   </div>
 }
