@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { AppStateProps, HomeState, LobbyState } from "./app-types";
-
+import crow from './assets/noun732.svg'
 
 const LOBBY_ID_LENGTH = 4;
 
@@ -21,34 +21,44 @@ function validateLobbyId(lobbyId: string, partial: boolean) {
 
 function randomLobbyId(): string {
   const chars = [];
-  for (let i = 0; i < 4; i ++) {
+  for (let i = 0; i < 4; i++) {
     chars.push((Math.floor(Math.random() * 10)).toString())
   }
   return chars.join("")
 }
 
-export function Home({state, setState}: AppStateProps<HomeState>) {
+export function Home({ state, setState }: AppStateProps<HomeState>) {
   const [lobbyId, setLobbyId] = useState("");
   const lobbyState: LobbyState = { ...state, stateName: "Lobby", lobbyMembers: [], ready: false, lobbyId };
-  return <div>
+  return <div className='login'>
     <h1>Home</h1>
-    <ul>
-      <li><button onClick={
-        () => setState({ ...lobbyState, lobbyId: randomLobbyId() })
-      }>Play</button></li>
-      <li>
-        <form onSubmit={
-          (e) => {
-            if (validateLobbyId(lobbyId, false)) setState(lobbyState);
-            e.preventDefault();
-          }
-        }>
-        <input type="text" value={lobbyId} onChange={(e) => {
-          if (validateLobbyId(e.target.value, true)) setLobbyId(e.target.value)
-        }}/>
-        <input type="submit" value="Join" />
-        </form>
-      </li>
-    </ul>
-  </div>
+    <table>
+      <tbody>
+        <tr>
+          <td>
+            <button onClick={
+              () => setState({ ...lobbyState, lobbyId: randomLobbyId() })
+            }>New Game</button>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <form onSubmit={
+              (e) => {
+                if (validateLobbyId(lobbyId, false)) setState(lobbyState);
+                e.preventDefault();
+              }
+            }>
+
+              <input type="text" value={lobbyId} onChange={(e) => {
+                if (validateLobbyId(e.target.value, true)) setLobbyId(e.target.value)
+              }} />
+              <input id='join' type="submit" value="Join" />
+            </form>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <img src={crow} style={{ "height": "100%", "width": "500px" }} />
+  </div >
 }
